@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1" author="Hareesh">
+        <createTable tableName="user">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="user_pk1"/>
+            </column>
+            <column name="firstname" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="varchar(50)"/>
+            <column name="username" type="varchar(100)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="user_uq1"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_issued_date" type="datetime"/>
+            <column name="discontinue_date" type="datetime"/>
+            <column name="created_date" type="datetime"/>
+            <column name="created_by" type="bigint"/>
+            <column name="updated_date" type="datetime"/>
+            <column name="updated_by" type="bigint"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Hareesh">
+        <createTable tableName="user_seq">
+            <column name="next_val" type="bigint"  />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="Hareesh">
+        <createIndex indexName="user_fk1" tableName="user">
+            <column name="created_by"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="4" author="Hareesh">
+        <createIndex indexName="user_fk2" tableName="user">
+            <column name="updated_by"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="5" author="Hareesh">
+        <addForeignKeyConstraint constraintName="user_fk1" baseTableName="user" baseColumnNames="created_by"
+                                 referencedTableName="user" referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="user_fk2" baseTableName="user" baseColumnNames="updated_by"
+                                 referencedTableName="user" referencedColumnNames="id"/>
+    </changeSet>
+
+
+    <changeSet id="6" author="Hareesh">
+        <createTable tableName="role">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="role_pk1"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="role_uq1"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="Hareesh">
+        <createTable tableName="role_seq">
+            <column name="next_val" type="bigint" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="Hareesh">
+        <createTable tableName="authority">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="authority_pk1"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="authority_uq1"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="9" author="Hareesh">
+        <createTable tableName="authority_seq">
+            <column name="next_val" type="bigint" />
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="10" author="Hareesh">
+        <createTable tableName="user_role">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="user_role" columnNames="user_id, role_id" constraintName="user_role_uq1"/>
+    </changeSet>
+
+    <changeSet id="11" author="Hareesh">
+        <createIndex indexName="user_role_fk1" tableName="user_role">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="12" author="Hareesh">
+        <createIndex indexName="user_role_fk2" tableName="user_role">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="13" author="Hareesh">
+        <addForeignKeyConstraint constraintName="user_role_fk1" baseTableName="user_role" baseColumnNames="user_id"
+                                 referencedTableName="user" referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="user_role_fk2" baseTableName="user_role" baseColumnNames="role_id"
+                                 referencedTableName="role" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="14" author="Hareesh">
+        <createTable tableName="role_authority">
+            <column name="role_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+        <addUniqueConstraint tableName="role_authority" columnNames="role_id, authority_id"
+                             constraintName="role_authority_uq1"/>
+    </changeSet>
+
+    <changeSet id="15" author="Hareesh">
+        <createIndex indexName="role_authority_fk1" tableName="role_authority">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="16" author="Hareesh">
+        <createIndex indexName="role_authority_fk2" tableName="role_authority">
+            <column name="authority_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="17" author="Hareesh">
+        <addForeignKeyConstraint constraintName="role_authority_fk1" baseTableName="role_authority"
+                                 baseColumnNames="role_id"
+                                 referencedTableName="role" referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="role_authority_fk2" baseTableName="role_authority"
+                                 baseColumnNames="authority_id"
+                                 referencedTableName="authority" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="18" author="hareeesh">
+        <sql splitStatements="true">
+            INSERT INTO user (created_by,created_date,discontinue_date,id,token_issued_date,updated_by,updated_date,firstname,lastname,password,username) VALUES
+            (NULL,'2025-03-20 19:01:18.767000',NULL,1,'2025-03-20 19:02:14.193000',NULL,'2025-03-20 19:02:14.792000','test','test','$2a$10$1RVeZV8clAUQNO6RcJTtJey/M6PMEkG7ewG4QX/ytVrXxPFSOfnYC','user');
+            insert into role values (1, 'admin');
+            insert into authority values (1, 'admin');
+            insert into role_authority values (1, 1);
+            INSERT INTO user_role VALUES(1, 1);
+
+            insert into user_seq values ( 1000 );
+            insert into authority_seq values ( 1000);
+            insert into role_seq values ( 1000 );
+
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
